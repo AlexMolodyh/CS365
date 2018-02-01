@@ -10,38 +10,46 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-public class FortuneTellerServer implements Runnable
+public class FortuneTellerServer
 {
-    private int port = 0;
-    private long startTime = 0;
-    private String[] beforeDate = {"You will be rich", "You will not be rich", "You will find someone soon"
-    ,"Be kind, rewind", "This isn't an actual fortune teller...."};
-    private String[] afterDate = {"You will find a job soon", "You will never find a job", "You will be successful after finishing school"
-    ,"You need to try harder!", "He's around the corner!!!"};
+    private static final int PORT = 1234;
+    private static ServerSocket serverSocket;
+    private static Socket clientSocket;
+    private static PrintWriter out;
+    private static BufferedReader in;
 
-    public FortuneTellerServer(int port)
-    {
-        this.port = port;
-    }
+    private static String[] beforeDate = {
+            "You will be rich"
+            , "You will not be rich"
+            , "You will find someone soon"
+            , "Be kind, rewind"
+            , "This isn't an actual fortune teller...."};
 
-    @Override
-    public void run()
+    private static String[] afterDate = {
+            "You will find a job soon"
+            , "You will never find a job"
+            , "You will be successful after finishing school"
+            , "You need to try harder!"
+            , "He's around the corner!!!"};
+
+    public static void main(String[] args)
     {
         boolean serverRun = true;
-        this.startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         try
         {
             while (serverRun)
             {
-                ServerSocket serverSocket = new ServerSocket(this.port);
-                Socket clientSocket = serverSocket.accept();
+                //Connect to client
+                serverSocket = new ServerSocket(PORT);
+                clientSocket = serverSocket.accept();
 
-                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                //Create reader and writer
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
                 String textFromClient = null;
                 String textToClient = null;
-
                 textFromClient = in.readLine(); // read the text from client
 
                 DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -51,27 +59,56 @@ public class FortuneTellerServer implements Runnable
                 {
                     Date targetDate = df.parse("01/01/1990");
 
+                    //Check if date from client is before or after target date
                     startDate = df.parse(textFromClient);
-                    if(startDate.before(targetDate))
-                        textToClient = beforeDate[new Random().nextInt(beforeDate.length - 1)];
+
+                    if (startDate.before(df.parse("00/01/0001")))
+                    {
+                        serverRun = false;
+                        textToClient = "quit";
+                    }
                     else
-                        textToClient = afterDate[new Random().nextInt(afterDate.length - 1)];
-                } catch (Exception e) {e.printStackTrace();}
+                    {
+                        if (startDate.before(targetDate))
+                            textToClient = beforeDate[new Random().nextInt(beforeDate.length - 1)];
+                        else
+                            textToClient = afterDate[new Random().nextInt(afterDate.length - 1)];
+                    }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
 
                 out.println(textToClient); // send the response to client
-                out.flush();
-                out.close();
-                in.close();
-                clientSocket.close();
-                serverSocket.close();
+                closeObjects();
 
-                if(System.currentTimeMillis() - this.startTime > 45000)
+                if (System.currentTimeMillis() - startTime > 60000)
                     serverRun = false;
             }
-        } catch (Exception e)
+        } catch (
+                Exception e)
+
         {
             e.printStackTrace();
         }
 
+    }
+
+    private static boolean closeObjects()
+    {
+        try
+        {
+            out.flush();
+            out.close();
+            in.close();
+            clientSocket.close();
+            serverSocket.close();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

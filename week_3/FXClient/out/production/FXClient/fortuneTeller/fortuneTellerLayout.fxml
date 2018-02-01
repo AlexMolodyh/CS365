@@ -28,6 +28,13 @@
                 id="connectButton"
                 styleClass="button">Connect
         </Button>
+
+        <Button
+                minWidth="200"
+                maxHeight="30"
+                id="disconnectButton"
+                styleClass="button">Disconnect
+        </Button>
     </FlowPane>
 
     <TilePane hgap="20" alignment="TOP_LEFT">
@@ -37,6 +44,11 @@
                 minWidth="200"
                 minHeight="30"
                 styleClass="button">Get Fortune</Button>
+
+        <Button id="clearButton"
+                minWidth="200"
+                minHeight="30"
+                styleClass="button">Clear</Button>
     </TilePane>
 
     <TilePane>
