@@ -1,0 +1,63 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.stage.Screen?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.FlowPane?>
+<FlowPane xmlns:fx="http://javafx.com/fxml" alignment="TOP_LEFT" hgap="20" vgap="20" stylesheets="style.css"
+          id="main-flow" >
+
+    <FlowPane hgap="40" minWidth="1100" id="second-tile-pane">
+        <TilePane.margin>
+            <Insets top="20"/>
+        </TilePane.margin>
+
+        <TextField id="ipText" maxWidth="300" minHeight="30" text="IP"/>
+        <TextField id="portText" maxWidth="300" minHeight="30" text="Port"/>
+
+        <Button
+                minWidth="200"
+                maxHeight="30"
+                id="connectButton"
+                styleClass="button">Connect
+        </Button>
+
+        <Button
+                minWidth="200"
+                maxHeight="30"
+                id="disconnectButton"
+                styleClass="button">Disconnect
+        </Button>
+    </FlowPane>
+
+    <TilePane hgap="20" alignment="TOP_LEFT">
+        <Label maxWidth="200" alignment="CENTER_LEFT">When is your birthday?</Label>
+        <DatePicker id="datePicker" minHeight="30"/>
+        <Button id="fortuneButton"
+                minWidth="200"
+                minHeight="30"
+                styleClass="button">Get Fortune</Button>
+
+        <Button id="clearButton"
+                minWidth="200"
+                minHeight="30"
+                styleClass="button">Clear</Button>
+    </TilePane>
+
+    <TilePane>
+        <TextArea
+                prefWidth="${screen.visualBounds.width}"
+                prefHeight="400"
+                id="messageOutput"/>
+        <fx:define>
+        <Screen fx:factory="getPrimary" fx:id="screen"/>
+    </fx:define>
+    </TilePane>
+</FlowPane>

@@ -1,5 +1,3 @@
-package fortuneTeller;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -92,7 +90,7 @@ public class FortuneTellerServer
         {
             e.printStackTrace();
         }
-
+		System.out.println("Server has stopped...");
     }
 
     private static boolean closeObjects()

@@ -1,0 +1,27 @@
+.button{
+    -fx-background-color: mediumturquoise;
+    -fx-border-color: darkslategrey;
+    -fx-border-style: hidden;
+    -fx-border-radius: 0;
+    -fx-scale-z: 10;
+    -fx-text-fill: white;
+}
+
+.button:disabled{
+    -fx-background-color: gray;
+}
+
+#connect-button:hover{
+    -fx-background-color: mediumaquamarine;
+}
+
+#connect-button:pressed{
+    -fx-background-color: linear-gradient(mediumaquamarine, darkcyan);
+    -fx-scale-z: 20;
+}
+
+#errorOutput{
+    -fx-text-fill: red;
+}
+
+
