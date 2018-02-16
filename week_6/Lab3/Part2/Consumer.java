@@ -1,12 +1,8 @@
-package sample;
-
 import java.util.Date;
 
 public class Consumer implements Runnable
 {
     private Buffer<Date> buffer;
-    private boolean keepReading = true;
-
     public Consumer(Buffer<Date> buffer)
     {
         this.buffer = buffer;
@@ -14,17 +10,13 @@ public class Consumer implements Runnable
     public void run()
     {
         Date message;
-        while (keepReading)
+        while (true)
         {
             // nap for awhile
-            SleepUtilities.nap(((BoundedBuffer<Date>)buffer).getConsumerSleep());
+            SleepUtilities.nap();
             // consume an item from the buffer
-            message = (Date)buffer.remove();
+            message = buffer.remove();
+            System.out.println("Consuming: " + message);
         }
-    }
-
-    public void setKeepReading(boolean keepReading)
-    {
-        this.keepReading = keepReading;
     }
 }

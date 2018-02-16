@@ -3,6 +3,8 @@ import java.util.Date;
 public class Producer implements Runnable
 {
     private Buffer<Date> buffer;
+    private boolean keepWriting = true;
+
     public Producer(Buffer<Date> buffer)
     {
         this.buffer = buffer;
@@ -10,14 +12,18 @@ public class Producer implements Runnable
     public void run()
     {
         Date message;
-        while (true)
+        while (keepWriting)
         {
             // nap for awhile
-            SleepUtilities.nap();
+            SleepUtilities.nap(((BoundedBuffer<Date>)buffer).getProducerSleep());
             // produce an item & enter it into the buffer
             message = new Date();
             buffer.insert(message);
-            System.out.println("Inserting: " + message);
         }
+    }
+
+    public void setKeepWriting(boolean keepWriting)
+    {
+        this.keepWriting = keepWriting;
     }
 }

@@ -14,7 +14,7 @@ public class BoundedBuffer<E> implements Buffer<E>
     private Semaphore full;
     private int producerSleep = 0;
     private int consumerSleep = 0;
-    private TextArea textArea = null;
+    private static TextArea textArea = null;
 
     public BoundedBuffer(TextArea textArea)
     {
@@ -43,11 +43,16 @@ public class BoundedBuffer<E> implements Buffer<E>
             mutex.release();
             full.release();
 
-            textArea.setText(textArea.getText() + "\n" + "Inserting into buffer\n   " +
+            String str = " ";
+            if(textArea.getText() != null)
+                str = textArea.getText();
+
+            textArea.setText(str + "\n" + "Inserting into buffer\n   " +
                     "Number of items in buffer is: " + (in));
         }
         catch (Exception e)
         {
+            in = 0;
             e.printStackTrace();
         }
     }
@@ -65,12 +70,17 @@ public class BoundedBuffer<E> implements Buffer<E>
             mutex.release();
             empty.release();
 
-            textArea.setText(textArea.getText() + "\n" + "Removing from buffer\n    " +
+            String str = " ";
+            if(textArea.getText() != null)
+                str = textArea.getText();
+
+            textArea.setText(str + "\n" + "Removing from buffer\n    " +
                     "Number of items in buffer is: " + (out));
         }
         catch (Exception e)
         {
-
+            out = 0;
+            e.printStackTrace();
         }
         return item;
     }
